@@ -1,0 +1,15 @@
+scalar DateTime
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  profilePicture: String!
+  language: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Query {
+  getUser: User!
+}
