@@ -8,6 +8,13 @@
 /* tslint:disable */
 /* eslint-disable */
 
+export class SignupInput {
+    name: string;
+    email: string;
+    profilePicture: string;
+    language: string;
+}
+
 export class User {
     id: string;
     name: string;
@@ -20,6 +27,10 @@ export class User {
 
 export abstract class IQuery {
     abstract getUser(): User | Promise<User>;
+}
+
+export abstract class IMutation {
+    abstract signup(input: SignupInput): string | Promise<string>;
 }
 
 export type DateTime = any;

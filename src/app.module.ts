@@ -5,6 +5,8 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
 import { ApolloDriverConfig, ApolloDriver } from '@nestjs/apollo';
 import { ConfigModule } from '@nestjs/config';
+import { AuthenticationModule } from './authentication/authentication.module';
+import { PrismaService } from 'prisma/prisma.service';
 
 @Module({
   imports: [
@@ -16,8 +18,9 @@ import { ConfigModule } from '@nestjs/config';
       installSubscriptionHandlers: false,
     }),
     ConfigModule.forRoot(),
+    AuthenticationModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, PrismaService],
 })
 export class AppModule {}
