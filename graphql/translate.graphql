@@ -1,0 +1,9 @@
+input TranslateInput {
+  text: String!
+  source: String!
+  target: String!
+}
+
+type Query {
+  translate(input: TranslateInput!): String!
+}
