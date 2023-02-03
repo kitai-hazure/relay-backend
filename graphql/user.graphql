@@ -10,6 +10,17 @@ type User {
   updatedAt: DateTime!
 }
 
+input SignupInput {
+  name: String!
+  email: String!
+  profilePicture: String!
+  language: String!
+}
+
 type Query {
   getUser: User!
+}
+
+type Mutation {
+  signup(input: SignupInput!): String!
 }
