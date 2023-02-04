@@ -8,6 +8,10 @@
 /* tslint:disable */
 /* eslint-disable */
 
+export class UpdateLanguageInput {
+    lang: string;
+}
+
 export class TranslateInput {
     text: string;
     source: string;
@@ -43,6 +47,12 @@ export abstract class IQuery {
     abstract getUser(): User | Promise<User>;
 }
 
+export abstract class IMutation {
+    abstract updateLanguage(input: UpdateLanguageInput): string | Promise<string>;
+
+    abstract signup(input: SignupInput): string | Promise<string>;
+}
+
 export class User {
     id: string;
     name: string;
@@ -51,10 +61,6 @@ export class User {
     language: string;
     createdAt: DateTime;
     updatedAt: DateTime;
-}
-
-export abstract class IMutation {
-    abstract signup(input: SignupInput): string | Promise<string>;
 }
 
 export type DateTime = any;
