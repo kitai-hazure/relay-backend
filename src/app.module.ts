@@ -8,7 +8,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { PrismaService } from 'prisma/prisma.service';
 import { TranslateModule } from './translate/translate.module';
-
+import { TranslateSocketModule } from './translate-socket/translate.event';
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -21,6 +21,7 @@ import { TranslateModule } from './translate/translate.module';
     ConfigModule.forRoot(),
     AuthenticationModule,
     TranslateModule,
+    TranslateSocketModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
