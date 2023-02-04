@@ -1,0 +1,16 @@
+type ChatUser {
+  id: ID!
+  socketId: ID!
+  userId: ID!
+  latitude: Float!
+  longitude: Float!
+}
+
+type Person {
+  distance: Float!
+  user: ChatUser!
+}
+
+type Query {
+  findPeople: [Person!]!
+}
