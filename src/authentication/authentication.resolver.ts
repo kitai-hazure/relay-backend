@@ -2,9 +2,8 @@ import { Resolver, Query, Mutation, Args, Context } from '@nestjs/graphql';
 import { getToken } from 'src/constants/getToken';
 import { SignupInput } from 'src/graphql.types';
 import { AuthenticationService } from './authentication.service';
-import { Authentication } from './entities/authentication.entity';
 
-@Resolver(() => Authentication)
+@Resolver()
 export class AuthenticationResolver {
   constructor(private readonly authenticationService: AuthenticationService) {}
 

@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken');
+import * as jwt from 'jsonwebtoken';
 import { JWT_SECRET_KEY } from '../constants/env';
 import { IPayload } from 'src/types/payload.type';
 
@@ -9,7 +9,9 @@ export const signJWT = (payload: IPayload) => {
 
 export const verifyJWT = (token: string) => {
   try {
-    const decoded = jwt.verify(token, JWT_SECRET_KEY, { algorithm: 'RS256' });
+    const decoded: IPayload = jwt.verify(token, JWT_SECRET_KEY, {
+      algorithm: 'RS256',
+    });
     return { payload: decoded, expired: false };
   } catch (err) {
     return { payload: null, expired: true };

@@ -1,13 +1,15 @@
 import {
+  ConnectedSocket,
   MessageBody,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
-  WsResponse,
 } from '@nestjs/websockets';
-import { from, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { PrismaService } from 'prisma/prisma.service';
 import { Server, Socket } from 'socket.io';
+import { TranslateService } from 'src/translate/translate.service';
+import { verifyJWT } from 'src/utils/jwt.utils';
+import { ChatInput, JoinRoomInput } from './dto/room';
 
 @WebSocketGateway({
   cors: {
@@ -15,39 +17,81 @@ import { Server, Socket } from 'socket.io';
   },
 })
 export class TranslateGateway {
-  @WebSocketServer()
-  server: Server;
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly translateService: TranslateService,
+  ) {}
 
-  // @SubscribeMessage('events')
-  // findAll(@MessageBody() data: any): Observable<WsResponse<number>> {
-  //   return from([1, 2, 3]).pipe(
-  //     map((item) => ({ event: 'events', data: item })),
-  //   );
-  // }
-  // @SubscribeMessage('identity')
-  // async identity(@MessageBody() data: number) {
-  //   // console.log('CLIENT: ', client);
-  //   console.log('DATA: ', data);
-  // }
+  @WebSocketServer() server: Server;
 
-  // a socket so that a client can join a room
   @SubscribeMessage('joinRoom')
-  async joinRoom(client: Socket, @MessageBody() data: any) {
-    console.log('CLIENT: ', client);
-    console.log('DATA: ', data);
+  async joinRoom(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() data: JoinRoomInput,
+  ) {
+    console.log('joining room: ', data.room);
     client.join(data.room);
+    const { payload, expired } = verifyJWT(data.token);
+    if (expired) return;
+    const userId = payload.id;
+    const socketId = client.id;
+    await this.prisma.chatUser.create({
+      data: {
+        socketId,
+        user: {
+          connect: {
+            id: userId,
+          },
+        },
+      },
+    });
     client.emit('joinedRoom', data.room);
   }
 
-  // a socket so that a client can chat with people only in that room
   @SubscribeMessage('chat')
-  async chat(client: Socket, @MessageBody() data: any) {
-    console.log('CLIENT: ', client);
-    console.log('DATA: ', data);
-    client.to(data.room).emit('chat', data);
+  async chat(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() data: ChatInput,
+  ) {
+    if (!client.rooms.has(data.room)) return;
+    const { payload } = verifyJWT(data.token);
+    const userId = payload.id;
+    const from = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+    const sockets = await this.server.in(data.room).fetchSockets();
+    for (const socket of sockets) {
+      if (socket.id !== client.id) {
+        const to = await this.prisma.chatUser.findUnique({
+          where: { socketId: socket.id },
+          select: {
+            user: {
+              select: {
+                language: true,
+              },
+            },
+          },
+        });
+        const translatedMessage = await this.translateService.translate({
+          text: data.msg,
+          source: from.language,
+          target: to.user.language,
+        });
+        socket.emit('chat', { data: translatedMessage, from: client.id });
+      }
+    }
   }
 
   handleConnection(client: Socket, ...args: any[]) {
     console.log('client connected', client.id);
+  }
+
+  async handleDisconnect(client: Socket, reason: string, ...args: any[]) {
+    await this.prisma.chatUser.deleteMany({
+      where: {
+        socketId: client.id,
+      },
+    });
+    console.log('client disconnected', client.id, reason);
   }
 }
