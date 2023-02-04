@@ -29,22 +29,10 @@ export class TranslateGateway {
     @ConnectedSocket() client: Socket,
     @MessageBody() data: JoinRoomInput,
   ) {
+    const { expired } = verifyJWT(data.token);
+    if (expired) return;
     console.log('joining room: ', data.room);
     client.join(data.room);
-    const { payload, expired } = verifyJWT(data.token);
-    if (expired) return;
-    const userId = payload.id;
-    const socketId = client.id;
-    await this.prisma.chatUser.create({
-      data: {
-        socketId,
-        user: {
-          connect: {
-            id: userId,
-          },
-        },
-      },
-    });
     client.emit('joinedRoom', data.room);
   }
 
@@ -82,7 +70,50 @@ export class TranslateGateway {
     }
   }
 
-  handleConnection(client: Socket, ...args: any[]) {
+  @SubscribeMessage('request-call')
+  async requestCall(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() data: { toId: string; fromId: string },
+  ) {
+    const connectToUser = await this.prisma.chatUser.findUnique({
+      where: {
+        userId: data.toId,
+      },
+    });
+
+    // send a socket data to the above users socket id
+    const socket = this.server.sockets.sockets.get(connectToUser.socketId);
+    socket.emit('request-call', {
+      fromId: data.fromId,
+      msg: 'Please connect with me',
+    });
+  }
+
+  async handleConnection(client: Socket, ...args: any[]) {
+    if (client.handshake.query.token) {
+      const token = client.handshake.query.token;
+      const { payload, expired } = verifyJWT(token as string);
+      if (!payload || expired) console.log('HEHE');
+      // check if user with this id already exists or not
+      const user = await this.prisma.chatUser.findUnique({
+        where: {
+          userId: payload.id,
+        },
+      });
+
+      if (user) return;
+      await this.prisma.chatUser.create({
+        data: {
+          socketId: client.id,
+          user: {
+            connect: {
+              // add user ID here
+              id: payload.id,
+            },
+          },
+        },
+      });
+    }
     console.log('client connected', client.id);
   }
 

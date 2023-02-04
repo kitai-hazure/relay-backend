@@ -21,6 +21,6 @@ model User {
 model ChatUser {
   id       String @id @default(auto()) @map("_id") @db.ObjectId
   socketId String @unique
-  userId   String @db.ObjectId
+  userId   String @db.ObjectId @unique
   user     User   @relation(fields: [userId], references: [id])
 }
