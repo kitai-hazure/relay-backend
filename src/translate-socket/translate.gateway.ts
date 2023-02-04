@@ -107,13 +107,6 @@ export class TranslateGateway {
         where: {
           userId: payload.id,
         },
-        select: {
-          user: {
-            select: {
-              name: true,
-            },
-          },
-        },
       });
       if (user) {
         await this.prisma.chatUser.update({
@@ -127,12 +120,20 @@ export class TranslateGateway {
           },
         });
       } else {
+        const existingUser = await this.prisma.user.findUnique({
+          where: {
+            id: payload.id,
+          },
+          select: {
+            name: true,
+          },
+        });
         await this.prisma.chatUser.create({
           data: {
             socketId: client.id,
             latitude: parseFloat(lat),
             longitude: parseFloat(lng),
-            name: user.user.name,
+            name: existingUser.name,
             user: {
               connect: {
                 id: payload.id,
