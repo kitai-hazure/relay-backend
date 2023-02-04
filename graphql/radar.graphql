@@ -8,7 +8,8 @@ type ChatUser {
 
 type Person {
   distance: Float!
-  user: ChatUser!
+  user: User!
+  chatUser: ChatUser!
 }
 
 type Query {

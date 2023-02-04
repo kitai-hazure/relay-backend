@@ -8,25 +8,28 @@ export class RadarService {
 
   async findPeople(userId: string) {
     // TODO: Implement in a better fashion
-    const user = await this.prismaService.chatUser.findUnique({
+    const currentUser = await this.prismaService.chatUser.findUnique({
       where: {
         userId,
       },
     });
     console.log(userId);
-    const { latitude, longitude } = user;
-    const users = await this.prismaService.chatUser.findMany();
+    const { latitude, longitude } = currentUser;
+    const chatUsers = await this.prismaService.chatUser.findMany();
     const result: Person[] = [];
-    for (const user of users) {
-      if (user.userId === userId) continue;
+    for (const chatUser of chatUsers) {
+      if (chatUser.userId === userId) continue;
       const distance = this.getDistanceFromLatLonInMetres(
-        user.latitude,
-        user.longitude,
+        chatUser.latitude,
+        chatUser.longitude,
         latitude,
         longitude,
       );
       if (distance < 1000) {
-        result.push({ user, distance });
+        const user = await this.prismaService.user.findUnique({
+          where: { id: chatUser.userId },
+        });
+        result.push({ user, chatUser, distance });
       }
     }
     result.sort((a, b) => a.distance - b.distance);

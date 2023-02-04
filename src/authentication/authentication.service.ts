@@ -9,19 +9,25 @@ export class AuthenticationService {
   constructor(private prismaService: PrismaService) {}
   async signup(input: SignupInput) {
     // create a mongodb use
-    const user = await this.prismaService.user.create({
-      data: {
+    let existingUser = await this.prismaService.user.findUnique({
+      where: {
         email: input.email,
-        name: input.name,
-        language: input.language,
-        profilePicture: input.profilePicture,
       },
     });
-
+    if (!existingUser) {
+      existingUser = await this.prismaService.user.create({
+        data: {
+          email: input.email,
+          name: input.name,
+          language: input.language,
+          profilePicture: input.profilePicture,
+        },
+      });
+    }
     const payload: IPayload = {
-      id: user.id,
-      email: user.email,
-      name: user.name,
+      id: existingUser.id,
+      email: existingUser.email,
+      name: existingUser.name,
     };
     const token = signJWT(payload);
     return token;

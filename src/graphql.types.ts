@@ -31,7 +31,8 @@ export class ChatUser {
 
 export class Person {
     distance: number;
-    user: ChatUser;
+    user: User;
+    chatUser: ChatUser;
 }
 
 export abstract class IQuery {

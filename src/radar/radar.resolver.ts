@@ -10,7 +10,9 @@ export class RadarResolver {
 
   @Query('findPeople')
   async findPeople(@Context() context): Promise<Person[]> {
-    const { expired, payload } = verifyJWT(context.req.headers.authorization.split(' ')[1]);
+    const { expired, payload } = verifyJWT(
+      context.req.headers.authorization.split(' ')[1],
+    );
     if (expired) throw new UnauthorizedException('Please login to continue.');
     return await this.radarService.findPeople(payload.id);
   }
