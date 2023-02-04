@@ -22,6 +22,7 @@ model ChatUser {
   id        String @id @default(auto()) @map("_id") @db.ObjectId
   socketId  String @unique
   userId    String @unique @db.ObjectId
+  name      String
   latitude  Float
   longitude Float
   user      User   @relation(fields: [userId], references: [id])

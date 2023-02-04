@@ -84,6 +84,7 @@ export class TranslateGateway {
     socket.emit('request-call', {
       fromId: data.fromId,
       toId: data.toId,
+      name: connectToUser.name,
       msg: 'Please connect with me',
     });
   }
@@ -106,6 +107,13 @@ export class TranslateGateway {
         where: {
           userId: payload.id,
         },
+        select: {
+          user: {
+            select: {
+              name: true,
+            },
+          },
+        },
       });
       if (user) {
         await this.prisma.chatUser.update({
@@ -124,6 +132,7 @@ export class TranslateGateway {
             socketId: client.id,
             latitude: parseFloat(lat),
             longitude: parseFloat(lng),
+            name: user.user.name,
             user: {
               connect: {
                 id: payload.id,
