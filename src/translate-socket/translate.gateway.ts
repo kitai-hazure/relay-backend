@@ -80,58 +80,39 @@ export class TranslateGateway {
         userId: data.toId,
       },
     });
+
+    // send a socket data to the above users socket id
     const socket = this.server.sockets.sockets.get(connectToUser.socketId);
     socket.emit('request-call', {
       fromId: data.fromId,
-      toId: data.toId,
       msg: 'Please connect with me',
     });
   }
 
   async handleConnection(client: Socket, ...args: any[]) {
-    if (
-      client.handshake.query.token &&
-      client.handshake.query.latitute &&
-      client.handshake.query.longitude
-    ) {
-      const get = (str: string | string[]): string => {
-        if (Array.isArray(str)) return str[0];
-        return str;
-      };
-      const lat = get(client.handshake.query.latitute);
-      const lng = get(client.handshake.query.longitude);
-      const { payload, expired } = verifyJWT(get(client.handshake.query.token));
-      if (!payload || expired) return;
+    if (client.handshake.query.token) {
+      const token = client.handshake.query.token;
+      const { payload, expired } = verifyJWT(token as string);
+      if (!payload || expired) console.log('HEHE');
+      // check if user with this id already exists or not
       const user = await this.prisma.chatUser.findUnique({
         where: {
           userId: payload.id,
         },
       });
-      if (user) {
-        await this.prisma.chatUser.update({
-          where: {
-            userId: payload.id,
-          },
-          data: {
-            socketId: client.id,
-            latitude: parseFloat(lat),
-            longitude: parseFloat(lng),
-          },
-        });
-      } else {
-        await this.prisma.chatUser.create({
-          data: {
-            socketId: client.id,
-            latitude: parseFloat(lat),
-            longitude: parseFloat(lng),
-            user: {
-              connect: {
-                id: payload.id,
-              },
+
+      if (user) return;
+      await this.prisma.chatUser.create({
+        data: {
+          socketId: client.id,
+          user: {
+            connect: {
+              // add user ID here
+              id: payload.id,
             },
           },
-        });
-      }
+        },
+      });
     }
     console.log('client connected', client.id);
   }
