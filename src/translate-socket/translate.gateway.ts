@@ -100,6 +100,8 @@ export class TranslateGateway {
       };
       const lat = get(client.handshake.query.latitute);
       const lng = get(client.handshake.query.longitude);
+      console.log("LAT: ",lat);
+      console.log("LON: ", lng);
       const { payload, expired } = verifyJWT(get(client.handshake.query.token));
       if (!payload || expired) return;
       const user = await this.prisma.chatUser.findUnique({

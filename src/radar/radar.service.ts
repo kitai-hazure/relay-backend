@@ -13,11 +13,12 @@ export class RadarService {
         userId,
       },
     });
+    console.log(userId);
     const { latitude, longitude } = user;
     const users = await this.prismaService.chatUser.findMany();
     const result: Person[] = [];
     for (const user of users) {
-      if (user.id === userId) continue;
+      if (user.userId === userId) continue;
       const distance = this.getDistanceFromLatLonInMetres(
         user.latitude,
         user.longitude,
