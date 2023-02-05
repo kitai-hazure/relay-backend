@@ -1,30 +1,25 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+## Problem
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+People with disabilities and language barriers often face challenges in conversation. For individuals with disabilities, physical or communication limitations can make it difficult to express themselves effectively. For those with language barriers, they may struggle to understand the conversation or be understood by others. These challenges can lead to feelings of isolation and frustration, as well as misunderstandings and missed opportunities. To address these issues, it is important to create an inclusive and supportive environment where individuals feel comfortable and able to participate fully in conversations. We need assistive technologies to help people in this regards.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Idea
 
-## Description
+The idea is to create a mobile application which people can use to conduct their conversations which has voice-to-text, text-to-speech, voice translations and text translations inbuilt to facilitate smoother conversations so that people can actually focus on the conversation instead of worrying about such barriers.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Benefits
+
+- Promotes inclusivity
+- Promotes international events
+- Eliminates language barriers
+- Promotes healthy conversations
+
+## Tech-stack
+
+The mobile application is made Flutter and uses [socket.io](http://socket.io) to handle messages with the backend which is made using Nest.js, Prisma ORM, GraphQL, Socket.io, MongoDB, Azure Cognitive Language service and deployed on Azure.
+
+## Future Work:
+
+This can be extended to one to many or many to many conversations like speeches, online chatting, live events like workshops and events with people with multiple nationalities. This will give more chance for people with disablities to attend such events without fear. They can pay more attention to the actual content of discussions instead of worrying about their disablities in understanding, conveying and be themselves and proudly take part in coversations.
 
 ## Installation
 
@@ -41,30 +36,14 @@ $ yarn run dev
 # production mode
 $ yarn run start:prod
 ```
+## Postman Workspace
 
-## Test
+[Workspace Link](https://www.canva.com/design/DAFZrVf9stg/6lTLJV1MHiz_9YX7VvpCqQ/view?utm_content=DAFZrVf9stg&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 
-```bash
-# unit tests
-$ yarn run test
+## Azure Deployment
 
-# e2e tests
-$ yarn run test:e2e
+[GraphQL Explorer](https://relay-backend.azurewebsites.net/graphql)
 
-# test coverage
-$ yarn run test:cov
-```
+## Presentation
 
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+[Canva Presentation](https://www.canva.com/design/DAFZrVf9stg/6lTLJV1MHiz_9YX7VvpCqQ/view?utm_content=DAFZrVf9stg&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
