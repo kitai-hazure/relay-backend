@@ -10,6 +10,7 @@ import { PrismaService } from 'prisma/prisma.service';
 import { TranslateModule } from './translate/translate.module';
 import { TranslateSocketModule } from './translate-socket/translate.event';
 import { RadarModule } from './radar/radar.module';
+import { SettingsModule } from './settings/settings.module';
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -24,6 +25,7 @@ import { RadarModule } from './radar/radar.module';
     TranslateModule,
     TranslateSocketModule,
     RadarModule,
+    SettingsModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],

@@ -1,0 +1,7 @@
+input UpdateLanguageInput {
+  lang: String!
+}
+
+type Mutation {
+  updateLanguage(input: UpdateLanguageInput!): String!
+}
