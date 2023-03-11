@@ -7,9 +7,13 @@ import { AuthenticationService } from './authentication.service';
 export class AuthenticationResolver {
   constructor(private readonly authenticationService: AuthenticationService) {}
 
-  @Mutation('signup')
-  createAuthentication(@Args('input') input: SignupInput) {
-    return this.authenticationService.signup(input);
+  // @Mutation('signup')
+  // createAuthentication(@Args('input') input: SignupInput) {
+  //   return this.authenticationService.signup(input);
+  // }
+  @Mutation('login')
+  login(@Args('input') input: SignupInput) {
+    return this.authenticationService.login(input);
   }
 
   @Query('getUser')

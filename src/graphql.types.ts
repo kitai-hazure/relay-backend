@@ -19,10 +19,7 @@ export class TranslateInput {
 }
 
 export class SignupInput {
-    name: string;
-    email: string;
-    profilePicture: string;
-    language: string;
+    serverAuthCode: string;
 }
 
 export class ChatUser {
@@ -50,7 +47,7 @@ export abstract class IQuery {
 export abstract class IMutation {
     abstract updateLanguage(input: UpdateLanguageInput): string | Promise<string>;
 
-    abstract signup(input: SignupInput): string | Promise<string>;
+    abstract login(input: SignupInput): string | Promise<string>;
 }
 
 export class User {

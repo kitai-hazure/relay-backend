@@ -11,10 +11,7 @@ type User {
 }
 
 input SignupInput {
-  name: String!
-  email: String!
-  profilePicture: String!
-  language: String!
+  serverAuthCode: String!
 }
 
 type Query {
@@ -22,5 +19,5 @@ type Query {
 }
 
 type Mutation {
-  signup(input: SignupInput!): String!
+  login(input: SignupInput!): String!
 }
